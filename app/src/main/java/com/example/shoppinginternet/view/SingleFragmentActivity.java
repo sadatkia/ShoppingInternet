@@ -1,4 +1,4 @@
-package com.example.shoppinginternet.Controller;
+package com.example.shoppinginternet.view;
 
 import android.os.Bundle;
 

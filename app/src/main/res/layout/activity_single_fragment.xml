@@ -7,6 +7,6 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container"
 
-    tools:context=".Controller.SingleFragmentActivity">
+    tools:context=".view.SingleFragmentActivity">
 
 </FrameLayout>
