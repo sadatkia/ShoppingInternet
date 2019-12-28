@@ -105,9 +105,9 @@ public class FlickrFetcher {
             if (!photoObject.has("url_s"))
                 continue;
 
-  /*          String id = photoObject.getString("id");
+           String id = photoObject.getString("id");
             String title = photoObject.getString("title");
-            String url = photoObject.getString("url_s");*/
+            String url = photoObject.getString("url_s");
             GalleryItem galleryItem = gson.fromJson(photoObject.toString(), GalleryItem.class);
             items.add(galleryItem);
         }
