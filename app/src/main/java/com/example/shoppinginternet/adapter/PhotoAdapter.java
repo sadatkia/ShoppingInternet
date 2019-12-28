@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoppinginternet.R;
-import com.example.shoppinginternet.Model.GalleryItem;
+import com.example.shoppinginternet.model.*;
 
 
 import java.util.List;
@@ -19,14 +19,14 @@ import java.util.List;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
     private Context mContext;
-    private List<GalleryItem> mItems;
+    private List<Response> mItems;
 
 
-    public void setItems(List<GalleryItem> items) {
+    public void setItems(List<Response> items) {
         mItems = items;
     }
 
-    public PhotoAdapter(Context context, List<GalleryItem> items) {
+    public PhotoAdapter(Context context, List<Response> items) {
         mContext = context;
         mItems = items;
     }
@@ -40,8 +40,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PhotoHolder holder, int position) {
-        //holder.bindGalleryItem(mItems.get(position));
-        holder.bindGalleryItem();
+        //holder.bindResponse(mItems.get(position));
+        holder.bindResponse();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
     public class PhotoHolder extends RecyclerView.ViewHolder {
 
         private ImageView mPhoto;
-        private GalleryItem mGalleryItem;
+        private Response mResponse;
 
         public PhotoHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,9 +60,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
             mPhoto = itemView.findViewById(R.id.image_view_photo);
         }
 
-        public void bindGalleryItem() {
+        public void bindResponse() {
 
-           // mGalleryItem = GalleryItem;
+           // mResponse = Response;
 
            Drawable drawable= mContext.getResources().getDrawable(R.drawable.ax2);
 
