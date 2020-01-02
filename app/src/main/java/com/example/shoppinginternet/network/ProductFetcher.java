@@ -3,7 +3,7 @@ package com.example.shoppinginternet.network;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.shoppinginternet.Model.GalleryItem;
+import com.example.shoppinginternet.model.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,13 +19,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.example.ShoppingInternet.model.GalleryItem;
+//import com.example.ShoppingInternet.model.Response;
 
 //import static com.example.ShoppingInternet.controller.PhotoGalleryFragment.index;
 
-public class FlickrFetcher {
+public class ProductFetcher {
 
-    public static final String TAG = "FlickrFetcher";
+    public static final String TAG = "ProductFetcher";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -57,7 +57,7 @@ public class FlickrFetcher {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<GalleryItem> fetchItems() {
+    public List<Response> fetchItems() {
         Uri uri = Uri.parse("https://www.flickr.com/services/rest")
                 .buildUpon()
                 .appendQueryParameter("method", "flickr.photos.getRecent")
@@ -85,8 +85,8 @@ public class FlickrFetcher {
         return null;
     }
 
-    public List<GalleryItem> parseItems(String bodyString) throws JSONException {
-        List<GalleryItem> items = new ArrayList<>();
+    public List<Response> parseItems(String bodyString) throws JSONException {
+        List<Response> items = new ArrayList<>();
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -108,8 +108,8 @@ public class FlickrFetcher {
            String id = photoObject.getString("id");
             String title = photoObject.getString("title");
             String url = photoObject.getString("url_s");
-            GalleryItem galleryItem = gson.fromJson(photoObject.toString(), GalleryItem.class);
-            items.add(galleryItem);
+            Response Response = gson.fromJson(photoObject.toString(), Response.class);
+            items.add(Response);
         }
 
         return items;
