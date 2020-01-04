@@ -33,9 +33,15 @@ public class ShoppingInternetFragment extends Fragment {
 
     public static final String TAG = "This is URL Digikala";
     private ShoppingViewModel viewModel;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerViewNew;
+    private RecyclerView mRecyclerViewPopular;
+
+    private RecyclerView mRecyclerViewRate;
+
     private List<Product> mItems = new ArrayList<>();
-    private PhotoAdapter mAdapter;
+    private PhotoAdapter mAdapterNew;
+    private PhotoAdapter mAdapterPopular;
+    private PhotoAdapter mAdapterRate;
 ////////////////////////////////////////////////////////////////////////////////
     public static ShoppingInternetFragment newInstance() {
 
@@ -58,7 +64,10 @@ public class ShoppingInternetFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         viewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
-        viewModel.getProductList();
+        viewModel.getProductListNew();
+        viewModel.getProductListPopular();
+        viewModel.getProductListRate();
+
        /* FlickrTask flickrTask=new FlickrTask();
          flickrTask.execute();*/
 
@@ -79,17 +88,34 @@ public class ShoppingInternetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_shopping_internet, container, false);
 
-        initUI(view);
+        initUINew(view);
+        initUIRate(view);
+        initUIPopular(view);
 
-        viewModel.getProductLiveData().observe(this, new Observer<List<Product>>() {
+        viewModel.getProductLiveDataNew().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                setupAdapter(products);
+
+                setupAdapterNew(products);
+            }
+        });
+        viewModel.getProductLiveDataPopular().observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+
+                setupAdapterPopular(products);
+            }
+        });
+        viewModel.getProductLiveDataRate().observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+
+                setupAdapterRate(products);
             }
         });
 
 
-     // setupAdapter(respons);
+        // setupAdapter(respons);
 
 
        // setContentView(R.layout.activity_main);
@@ -131,19 +157,50 @@ public class ShoppingInternetFragment extends Fragment {
          return view;
     }
 
-    private void initUI(View view) {
-        mRecyclerView = view.findViewById(R.id.recycler_view_photo_Shopping);
+    private void initUINew(View view) {
+        mRecyclerViewNew = view.findViewById(R.id.recycler_view_photo_Shopping);
        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerViewNew.setLayoutManager(layoutManager);
+    }
+    private void initUIRate(View view) {
+        mRecyclerViewRate = view.findViewById(R.id.recycler_view_photo_Shopping_Rate);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        mRecyclerViewRate.setLayoutManager(layoutManager);
+    }
+    private void initUIPopular(View view) {
+        mRecyclerViewPopular = view.findViewById(R.id.recycler_view_photo_Shopping_Popular);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        mRecyclerViewPopular.setLayoutManager(layoutManager);
     }
 
-    private void setupAdapter(List<Product> items) {
-        if (mAdapter == null) {
-            mAdapter = new PhotoAdapter(getContext(), items);
-            mRecyclerView.setAdapter(mAdapter);
+
+    private void setupAdapterNew(List<Product> items) {
+        if (mAdapterNew == null) {
+            mAdapterNew = new PhotoAdapter(getContext(), items);
+            mRecyclerViewNew.setAdapter(mAdapterNew);
         } else {
-            mAdapter.setItems(items);
-            mAdapter.notifyDataSetChanged();
+            mAdapterNew.setItems(items);
+            mAdapterNew.notifyDataSetChanged();
+        }
+    }
+
+    private void setupAdapterPopular(List<Product> items) {
+        if (mAdapterPopular == null) {
+            mAdapterPopular = new PhotoAdapter(getContext(), items);
+            mRecyclerViewPopular.setAdapter(mAdapterPopular);
+        } else {
+            mAdapterPopular.setItems(items);
+            mAdapterPopular.notifyDataSetChanged();
+        }
+    }
+
+    private void setupAdapterRate(List<Product> items) {
+        if (mAdapterRate == null) {
+            mAdapterRate = new PhotoAdapter(getContext(), items);
+            mRecyclerViewRate.setAdapter(mAdapterRate);
+        } else {
+            mAdapterRate.setItems(items);
+            mAdapterRate.notifyDataSetChanged();
         }
     }
 

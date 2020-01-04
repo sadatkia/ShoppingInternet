@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -22,15 +26,58 @@
 
     </com.daimajia.slider.library.Indicators.PagerIndicator>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:text="جدیدترین محصولات "
+        android:textColor="#F10606">
+
+    </TextView>
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/recycler_view_photo_Shopping"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         tools:context=".view.ShoppingInternetActivity"
         tools:listitem="@layout/list_item_photo">
 
-    </androidx.recyclerview.widget.RecyclerView>z
+    </androidx.recyclerview.widget.RecyclerView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:textColor="#F10606"
+        android:text="پربازدیدترین محصولات ">
+
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/recycler_view_photo_Shopping_Popular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:context=".view.ShoppingInternetActivity"
+        tools:listitem="@layout/list_item_photo"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:textColor="#F10606"
+        android:text="بیشترین امتیاز محصولات ">
+   </TextView>
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/recycler_view_photo_Shopping_Rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.ShoppingInternetActivity"
+        tools:listitem="@layout/list_item_photo">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
+</ScrollView>

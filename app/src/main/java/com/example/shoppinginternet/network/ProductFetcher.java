@@ -21,11 +21,13 @@ public class ProductFetcher {
 
     private static ProductFetcher instance;
 
-    private MutableLiveData<List<Product>> mProductLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductLiveDataNews = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductLiveDataPopular = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductLiveDataRate = new MutableLiveData<>();
 
     public static final String TAG = "FlickrFetcher";
-    public static final String Customer_KEY ="ck_ca237326f289cfbcfc1c2be0dec147ed53ca6d71";
-    public static final String Cunsomer_secret ="cs_dd9277e750a9c8e832c2f175ee5d7eff2586f1c1";
+    public static final String Customer_KEY="ck_ca237326f289cfbcfc1c2be0dec147ed53ca6d71";
+    public static final String Cusomer_secret="cs_dd9277e750a9c8e832c2f175ee5d7eff2586f1c1";
 
     public static final String BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
 
@@ -42,8 +44,8 @@ public class ProductFetcher {
     private ProductFetcher() {
 
         mQueries = new HashMap<String, String>() {{
-            put("customer_key", Customer_KEY);
-            put("customer_secret", Cunsomer_secret);
+            put("consumer_key", Customer_KEY);
+            put("consumer_secret", Cusomer_secret);
 
         }};
 
@@ -56,10 +58,17 @@ public class ProductFetcher {
                 .create(ProductService.class);
     }
 
-    public MutableLiveData<List<Product>> getmProductLiveData() {
-        return mProductLiveData;
+    public MutableLiveData<List<Product>> getmProductLiveDataNews() {
+        return mProductLiveDataNews;
     }
 
+    public MutableLiveData<List<Product>> getmProductLiveDataPopular() {
+        return mProductLiveDataPopular;
+    }
+
+    public MutableLiveData<List<Product>> getmProductLiveDataRate() {
+        return mProductLiveDataRate;
+    }
     /*
     public void searchPhotos(String query) {
 //        String url = buildUrl(SEARCH_PHOTOS_METHOD, query);
@@ -71,11 +80,29 @@ public class ProductFetcher {
         call.enqueue(getRetrofitCallback());
     }*/
 
-    public void getProductList(){
-        mFlickrService.getResponse(mQueries).enqueue(getRetrofitCallback());
-    }
+    public void getProductListNew(){
 
-    private Callback<List<Product>> getRetrofitCallback() {
+
+        mFlickrService.getResponse(mQueries).enqueue(getRetrofitCallback("New"));
+
+    }
+    public void getProductListPopular(){
+        HashMap<String ,String>mNewQueries=new HashMap<>();
+        mNewQueries.putAll(mQueries);
+
+        mNewQueries.put("orderby","popularity");
+        mFlickrService.getResponse(mNewQueries).enqueue(getRetrofitCallback("popularity"));
+
+    }
+public void getProductListRate(){
+    HashMap<String ,String>mNewQueries=new HashMap<>();
+    mNewQueries.putAll(mQueries);
+    mNewQueries.put("orderby","rating");
+    mFlickrService.getResponse(mNewQueries).enqueue(getRetrofitCallback("rating"));
+
+}
+
+    private Callback<List<Product>> getRetrofitCallback(final String s) {
         return new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -85,7 +112,13 @@ public class ProductFetcher {
                     Log.d(TAG, "isSuccessful: ");
 
                     List<Product> products = response.body();
-                    mProductLiveData.setValue(products);
+                    if(s.equals("New"))
+                    mProductLiveDataNews.setValue(products);
+                   else if (s.equals("popularity"))
+                    mProductLiveDataPopular.setValue(products);
+                   else if (s.equals("rating"))
+                    mProductLiveDataRate.setValue(products);
+
                 }
             }
 

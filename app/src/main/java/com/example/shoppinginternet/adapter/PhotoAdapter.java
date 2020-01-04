@@ -1,18 +1,18 @@
 package com.example.shoppinginternet.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoppinginternet.R;
-import com.example.shoppinginternet.model.*;
-
+import com.example.shoppinginternet.model.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
     @Override
     public void onBindViewHolder(@NonNull PhotoHolder holder, int position) {
         //holder.bindResponse(mItems.get(position));
-        holder.bindResponse();
+        holder.bindResponse(mItems.get(position));
     }
 
     @Override
@@ -53,20 +53,33 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
         private ImageView mPhoto;
         private Product mProduct;
+        private TextView mTextView;
+        private TextView mTextView2;
 
         public PhotoHolder(@NonNull View itemView) {
             super(itemView);
 
             mPhoto = itemView.findViewById(R.id.image_view_photo);
+            mTextView=itemView.findViewById(R.id.textView);
+            mTextView2=itemView.findViewById(R.id.textView2);
         }
 
-        public void bindResponse() {
+        public void bindResponse(Product  mProductt) {
 
-           // mProduct = Product;
-
+         /* *//* mProduct = Product;
+*//*
            Drawable drawable= mContext.getResources().getDrawable(R.drawable.ax2);
 
-           mPhoto.setImageDrawable(drawable);
+           mPhoto.setImageDrawable(drawable);*/
+
+            mProduct = mProductt;
+mTextView.setText(mProduct.getName());
+mTextView2.setText(mProduct.getPrice());
+            Picasso.with(mContext)
+                    .load(mProduct.getImages().get(0).getSrc())
+                    .placeholder(R.drawable.ax2)
+                    .into(mPhoto);
+
 
         }
     }

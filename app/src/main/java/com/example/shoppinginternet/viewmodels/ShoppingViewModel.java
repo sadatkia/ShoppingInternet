@@ -19,11 +19,24 @@ public class ShoppingViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public MutableLiveData<List<Product>> getProductLiveData(){
-        return productFetcher.getmProductLiveData();
+    public MutableLiveData<List<Product>> getProductLiveDataNew(){
+        return productFetcher.getmProductLiveDataNews();
+    }
+    public MutableLiveData<List<Product>> getProductLiveDataPopular(){
+        return productFetcher.getmProductLiveDataPopular();
+    }
+    public MutableLiveData<List<Product>> getProductLiveDataRate(){
+        return productFetcher.getmProductLiveDataRate();
     }
 
-    public void getProductList(){
-        productFetcher.getProductList();
+    public void getProductListNew(){
+        productFetcher.getProductListNew();
     }
+    public void getProductListRate(){
+        productFetcher.getProductListRate();
+    }
+    public void getProductListPopular(){
+        productFetcher.getProductListPopular();
+    }
+
 }
