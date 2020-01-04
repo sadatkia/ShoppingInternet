@@ -8,15 +8,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.example.shoppinginternet.Model.GalleryItem;
 import com.example.shoppinginternet.R;
 import com.example.shoppinginternet.adapter.PhotoAdapter;
+import com.example.shoppinginternet.model.Product;
+import com.example.shoppinginternet.viewmodels.ShoppingViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +32,9 @@ import java.util.List;
 public class ShoppingInternetFragment extends Fragment {
 
     public static final String TAG = "This is URL Digikala";
+    private ShoppingViewModel viewModel;
     private RecyclerView mRecyclerView;
-    private List<GalleryItem> mItems = new ArrayList<>();
+    private List<Product> mItems = new ArrayList<>();
     private PhotoAdapter mAdapter;
 ////////////////////////////////////////////////////////////////////////////////
     public static ShoppingInternetFragment newInstance() {
@@ -53,7 +57,8 @@ public class ShoppingInternetFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
+        viewModel = ViewModelProviders.of(this).get(ShoppingViewModel.class);
+        viewModel.getProductList();
        /* FlickrTask flickrTask=new FlickrTask();
          flickrTask.execute();*/
 
@@ -63,7 +68,9 @@ public class ShoppingInternetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        List<GalleryItem> galleryItems=new ArrayList<GalleryItem>();
+
+
+        List<Product> respons =new ArrayList<Product>();
 
         super.onCreate(savedInstanceState);
         SliderLayout mDemoSlider;
@@ -73,7 +80,16 @@ public class ShoppingInternetFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_shopping_internet, container, false);
 
         initUI(view);
-        setupAdapter(galleryItems);
+
+        viewModel.getProductLiveData().observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                setupAdapter(products);
+            }
+        });
+
+
+     // setupAdapter(respons);
 
 
        // setContentView(R.layout.activity_main);
@@ -135,7 +151,7 @@ public class ShoppingInternetFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
-    private void setupAdapter(List<GalleryItem> items) {
+    private void setupAdapter(List<Product> items) {
         if (mAdapter == null) {
             mAdapter = new PhotoAdapter(getContext(), items);
             mRecyclerView.setAdapter(mAdapter);

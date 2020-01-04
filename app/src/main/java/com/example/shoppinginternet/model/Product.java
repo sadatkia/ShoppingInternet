@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Response{
+public class Product {
 
 
 	@SerializedName("upsell_ids")
@@ -736,7 +736,7 @@ public class Response{
 	@Override
  	public String toString(){
 		return 
-			"Response{" + 
+			"Product{" +
 			"upsell_ids = '" + upsellIds + '\'' + 
 			",featured = '" + featured + '\'' + 
 			",purchasable = '" + purchasable + '\'' + 

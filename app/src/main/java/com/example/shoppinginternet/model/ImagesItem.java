@@ -2,9 +2,9 @@ package com.example.shoppinginternet.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("com.robohorse.robopojogenerator")
+
+
 public class ImagesItem{
 
 	@SerializedName("date_modified_gmt")

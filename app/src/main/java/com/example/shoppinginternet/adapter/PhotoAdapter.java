@@ -19,14 +19,14 @@ import java.util.List;
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
     private Context mContext;
-    private List<Response> mItems;
+    private List<Product> mItems;
 
 
-    public void setItems(List<Response> items) {
+    public void setItems(List<Product> items) {
         mItems = items;
     }
 
-    public PhotoAdapter(Context context, List<Response> items) {
+    public PhotoAdapter(Context context, List<Product> items) {
         mContext = context;
         mItems = items;
     }
@@ -52,7 +52,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
     public class PhotoHolder extends RecyclerView.ViewHolder {
 
         private ImageView mPhoto;
-        private Response mResponse;
+        private Product mProduct;
 
         public PhotoHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,7 +62,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
         public void bindResponse() {
 
-           // mResponse = Response;
+           // mProduct = Product;
 
            Drawable drawable= mContext.getResources().getDrawable(R.drawable.ax2);
 
