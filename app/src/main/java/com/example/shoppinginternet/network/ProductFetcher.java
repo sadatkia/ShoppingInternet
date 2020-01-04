@@ -1,117 +1,100 @@
 package com.example.shoppinginternet.network;
 
-import android.net.Uri;
 import android.util.Log;
 
-import com.example.shoppinginternet.model.Response;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import androidx.lifecycle.MutableLiveData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.shoppinginternet.model.Product;
+import com.example.shoppinginternet.network.Retrofit.ProductService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-//import com.example.ShoppingInternet.model.Response;
-
-//import static com.example.ShoppingInternet.controller.PhotoGalleryFragment.index;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductFetcher {
 
-    public static final String TAG = "ProductFetcher";
+    private static ProductFetcher instance;
 
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
-        URL url = new URL(urlSpec);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        InputStream inputStream = connection.getInputStream();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private MutableLiveData<List<Product>> mProductLiveData = new MutableLiveData<>();
 
-        try {
+    public static final String TAG = "FlickrFetcher";
+    public static final String Customer_KEY ="ck_ca237326f289cfbcfc1c2be0dec147ed53ca6d71";
+    public static final String Cunsomer_secret ="cs_dd9277e750a9c8e832c2f175ee5d7eff2586f1c1";
 
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IOException(connection.getResponseMessage() + "url: " + urlSpec);
-            }
+    public static final String BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
 
-            int bytesRead = 0;
-            byte[] buffer = new byte[1024 * 2];
-            while ((bytesRead = inputStream.read(buffer)) > 0) {
-                out.write(buffer, 0, bytesRead);
-            }
+    private Map<String, String> mQueries;
+    private Retrofit mRetrofit;
+    private ProductService mFlickrService;
 
-            return out.toByteArray();
-        } finally {
-            connection.disconnect();
-            inputStream.close();
-            out.close();
-        }
+    public static ProductFetcher getInstance() {
+        if (instance == null)
+            instance = new ProductFetcher();
+        return instance;
     }
 
-    public String getUrlString(String urlSpec) throws IOException {
-        return new String(getUrlBytes(urlSpec));
-    }
+    private ProductFetcher() {
 
-    public List<Response> fetchItems() {
-        Uri uri = Uri.parse("https://www.flickr.com/services/rest")
-                .buildUpon()
-                .appendQueryParameter("method", "flickr.photos.getRecent")
-                .appendQueryParameter("api_key", "79b5c28546b0c0fd5a0bdc65ac9eab18")
-                .appendQueryParameter("format", "json")
-                .appendQueryParameter("nojsoncallback", "1")
-                .appendQueryParameter("extras", "url_s")
-               // .appendQueryParameter("page", String.valueOf(index))
+        mQueries = new HashMap<String, String>() {{
+            put("customer_key", Customer_KEY);
+            put("customer_secret", Cunsomer_secret);
+
+        }};
+
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        String url = uri.toString();
-        Log.d(TAG, "url: " + url);
-
-        try {
-            String bodyString = getUrlString(url);
-            Log.d(TAG, "result: " + bodyString);
-
-            return parseItems(bodyString);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-
-        return null;
+        mFlickrService = mRetrofit
+                .create(ProductService.class);
     }
 
-    public List<Response> parseItems(String bodyString) throws JSONException {
-        List<Response> items = new ArrayList<>();
-
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-
-
-
-
-        JSONObject jsonBody = new JSONObject(bodyString);
-        JSONObject photosObject = jsonBody.getJSONObject("photos");
-        JSONArray photoArray = photosObject.getJSONArray("photo");
-
-        for (int i = 0; i < photoArray.length(); i++) {
-            JSONObject photoObject = photoArray.getJSONObject(i);
-
-            if (!photoObject.has("url_s"))
-                continue;
-
-           String id = photoObject.getString("id");
-            String title = photoObject.getString("title");
-            String url = photoObject.getString("url_s");
-            Response Response = gson.fromJson(photoObject.toString(), Response.class);
-            items.add(Response);
-        }
-
-        return items;
+    public MutableLiveData<List<Product>> getmProductLiveData() {
+        return mProductLiveData;
     }
+
+    /*
+    public void searchPhotos(String query) {
+//        String url = buildUrl(SEARCH_PHOTOS_METHOD, query);
+//        return downloadGalleryItems(url);
+        mQueries.put("method", SEARCH_PHOTOS_METHOD);
+        mQueries.put("text", query);
+        Call<FlickrBody> call = mFlickrService.getBody(mQueries);
+
+        call.enqueue(getRetrofitCallback());
+    }*/
+
+    public void getProductList(){
+        mFlickrService.getResponse(mQueries).enqueue(getRetrofitCallback());
+    }
+
+    private Callback<List<Product>> getRetrofitCallback() {
+        return new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                Log.d(TAG, "onResponse: " + response.message());
+
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "isSuccessful: ");
+
+                    List<Product> products = response.body();
+                    mProductLiveData.setValue(products);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        };
+    }
+
+
 }
