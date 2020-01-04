@@ -125,22 +125,8 @@ public class ShoppingInternetFragment extends Fragment {
         }
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-       // mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+
         mDemoSlider.setDuration(4000);
-       // mDemoSlider.addOnPageChangeListener(getActivity());
-     /*   ListView l = view.findViewById(R.id.ax5);
-        l.setAdapter(new TransformerAdapter(this));
-        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDemoSlider.setPresetTransformer(((TextView) view).getText().toString());
-                Toast.makeText(SingleFragmentActivity.this, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
-            }*/
-      //  });
-
-
-
-
 
          return view;
     }
